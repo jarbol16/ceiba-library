@@ -59,5 +59,41 @@ namespace DominioTest.Unitarias
             Assert.IsFalse(esprestado);
         }
 
+        /// <summary>
+        /// Prueba para verificar que el isb cumple con el estandar
+        /// </summary>
+        [TestMethod]
+        public void ValidarISBN()
+        {
+            Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro.Object, repositorioPrestamo.Object);
+            try
+            {
+                bibliotecario.Prestar("123a224", "juan");
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(Bibliotecario.ISBN_NOT_FORMAT, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Validaciond e isb Palindromo
+        /// </summary>
+        [TestMethod]
+        public void IsPalindromo()
+        {
+            Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro.Object, repositorioPrestamo.Object);
+            try
+            {
+                bibliotecario.Prestar("11211", "juan");
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(Bibliotecario.STR_IS_PALINDROMO, ex.Message);
+            }
+        }
+
     }
 }

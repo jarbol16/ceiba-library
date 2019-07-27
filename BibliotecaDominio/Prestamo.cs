@@ -19,5 +19,10 @@ namespace BibliotecaDominio
             this.FechaEntregaMaxima = fechaEntregaMaxima;
             this.NombreUsuario = nombreUsuario;
         }
+
+        public Prestamo()
+        {
+
+        }
     }
 }

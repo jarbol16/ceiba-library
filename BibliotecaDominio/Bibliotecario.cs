@@ -37,7 +37,7 @@ namespace BibliotecaDominio
             Prestamo prestamo;
             if (isbn.SumIsMoreThan(30))
             {
-                prestamo = new Prestamo(DateTime.Now, libro, BuildDateOfDelivery(), nombreUsuario);
+                prestamo = new Prestamo(DateTime.Now, libro, BuildDateOfDelivery(DateTime.Now), nombreUsuario);
             }
             else
             {
@@ -65,9 +65,9 @@ namespace BibliotecaDominio
         /// Calcula la fecha en la que el usuario debera entregar el libro
         /// </summary>
         /// <returns></returns>
-        public DateTime BuildDateOfDelivery()
+        public static DateTime BuildDateOfDelivery(DateTime now)
         {
-            DateTime dateDelivery = DateTime.Now;
+            DateTime dateDelivery = now;
             bool moreDays = true;
             int numDays = 1;
             while (moreDays)

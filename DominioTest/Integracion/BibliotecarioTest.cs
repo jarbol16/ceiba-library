@@ -69,5 +69,37 @@ namespace DominioTest.Integracion
         
         }
 
+
+        [TestMethod]
+        public void ValidateFechaNula()
+        {
+            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).Build();
+            repositorioLibro.Agregar(libro);
+            Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
+            bibliotecario.Prestar(libro.Isbn, "pedrito");
+            Assert.AreEqual(bibliotecario.EsPrestado(libro.Isbn), true);
+            /*
+            Prestamo prestamo = repositorioPrestamo.Obtener(libro.Isbn);
+            Assert.AreEqual(null, prestamo.FechaEntregaMaxima);
+            */
+        }
+
+        /// <summary>
+        /// Prueba para validar que se construya bien la fecha de entrega
+        /// </summary>
+        [TestMethod]
+        public void ValidarFechaDEntrega()
+        {
+            DateTime now = DateTime.Now;
+       
+            DateTime _naw = Bibliotecario.BuildDateOfDelivery(now);
+            DateTime next = new DateTime(2019, 8, 13);
+            Assert.AreEqual(next.Date, _naw.Date);
+
+            //TODO: Esta funcion esta mala
+            //DateTime __now = CalificadorUtil.sumarDiasSinContarDomingo(now, 15);
+
+        }
+
     }
 }
