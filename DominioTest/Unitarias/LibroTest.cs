@@ -33,5 +33,14 @@ namespace DominioTest.Unitarias
             Assert.AreEqual(ISBN, libro.Isbn);
             Assert.AreEqual(ANIO, libro.Anio);
         }
+
+        /// <summary>
+        /// Prueb apara validar el codigo isbn
+        /// </summary>
+        [TestMethod]
+        public void ValidateIsbn()
+        {
+            
+        }
     }
 }

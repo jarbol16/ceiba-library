@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace BibliotecaDominio
 {
@@ -17,6 +18,20 @@ namespace BibliotecaDominio
         public static bool IsNumber(this string str)
         {
             return long.TryParse(str, out _);
+        }
+
+        /// <summary>
+        /// Valida si una cadena es palindromo
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsPalindromo(this string str)
+        {
+            if (str.ToLower().SequenceEqual(str.ToLower().Reverse()))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
