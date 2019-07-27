@@ -18,7 +18,7 @@ namespace BibliotecaRepositorio.Repositorio
         public RepositorioPrestamoEF(BibliotecaContexto bibliotecaContexto, IRepositorioLibro repositorioLibro)
         {
             this.bibliotecaContexto = bibliotecaContexto;
-            this.libroRepositorio = (IRepositorioLibroEF) repositorioLibro;
+            this.libroRepositorio = (IRepositorioLibroEF)repositorioLibro;
         }
 
         public void Agregar(Prestamo prestamo)
@@ -26,7 +26,7 @@ namespace BibliotecaRepositorio.Repositorio
             PrestamoEntidad prestamoEntidad = BuildPrestamoEntidad(prestamo);
             bibliotecaContexto.Prestamos.Add(prestamoEntidad);
             bibliotecaContexto.SaveChanges();
-            
+
         }
 
         public Libro ObtenerLibroPrestadoPorIsbn(string isbn)
@@ -57,9 +57,17 @@ namespace BibliotecaRepositorio.Repositorio
 
         public Prestamo Obtener(string isbn)
         {
+            Prestamo prestamo = null;
             PrestamoEntidad prestamoEntidad = ObtenerPrestamoEntidadPorIsbn(isbn);
-
-            return new Prestamo(prestamoEntidad.FechaSolicitud, LibroBuilder.ConvertirADominio(prestamoEntidad.LibroEntidad), prestamoEntidad.FechaEntregaMaxima, prestamoEntidad.NombreUsuario);
-        }                
+            if (prestamoEntidad != null)
+            {
+                prestamo = new Prestamo( 
+                    prestamoEntidad.FechaSolicitud,
+                    LibroBuilder.ConvertirADominio(prestamoEntidad.LibroEntidad),
+                    prestamoEntidad.FechaEntregaMaxima, prestamoEntidad.NombreUsuario
+                    );
+            }
+            return prestamo;
+        }                 
     }
 }

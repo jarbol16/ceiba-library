@@ -31,8 +31,20 @@ namespace BibliotecaDominio
                 throw new Exception(ISBN_NOT_FORMAT);
             if (isbn.IsPalindromo())
                 throw new Exception(STR_IS_PALINDROMO);
-
-            throw new Exception("se debe implementar este método");
+            if (this.prestamoRepositorio.Obtener(isbn) != null)
+                throw new Exception(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
+            Libro libro = this.libroRepositorio.ObtenerPorIsbn(isbn);
+            Prestamo prestamo;
+            if (isbn.SumIsMoreThan(30))
+            {
+                prestamo = new Prestamo(DateTime.Now, libro, BuildDateOfDelivery(), nombreUsuario);
+            }
+            else
+            {
+                prestamo = new Prestamo(DateTime.Now, libro, null, nombreUsuario);
+            }
+            this.prestamoRepositorio.Agregar(prestamo);
+            
         }
 
 
@@ -47,6 +59,26 @@ namespace BibliotecaDominio
                 throw new Exception(ISBN_NOT_FORMAT);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Calcula la fecha en la que el usuario debera entregar el libro
+        /// </summary>
+        /// <returns></returns>
+        public DateTime BuildDateOfDelivery()
+        {
+            DateTime dateDelivery = DateTime.Now;
+            bool moreDays = true;
+            int numDays = 1;
+            while (moreDays)
+            {
+                if (!dateDelivery.DayOfWeek.Equals(DayOfWeek.Sunday))
+                    numDays++;
+                dateDelivery = dateDelivery.AddDays(1);
+                if (numDays == 15)
+                    moreDays = false;
+            }
+            return dateDelivery;
         }
     }
 }
