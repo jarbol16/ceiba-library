@@ -33,7 +33,7 @@ namespace DominioTest.Integracion
         public void PrestarLibroTest()
         {
             // Arrange
-            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).Build();
+            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).ConIsbn("3458").Build();
             repositorioLibro.Agregar(libro);
             Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
 
@@ -84,24 +84,20 @@ namespace DominioTest.Integracion
             */
         }
 
+
         /// <summary>
         /// Prueba para validar que se construya bien la fecha de entrega
         /// </summary>
-        [TestMethod]
-        public void ValidarFechaDEntrega()
+        /// <param name="prestamo">Fecha en la que se hace el prestamo</param>
+        /// <param name="entrega">Ña fecha en la que se debe devolver</param>
+        [DataTestMethod]
+        [DataRow("24/05/2017", "09/06/2017")]
+        [DataRow("26/05/2017", "12/06/2017")]
+        public void ValidarFechaDEntrega(string prestamo, string entrega)
         {
-            DateTime now = new DateTime(2017, 5, 24);
-            DateTime _naw = Bibliotecario.BuildDateOfDelivery(now);
-            DateTime next = new DateTime(2017, 6, 9);
-            Assert.AreEqual(next.Date, _naw.Date);
-
-
-            now = new DateTime(2017, 5, 26);
-            _naw = Bibliotecario.BuildDateOfDelivery(now);
-            next = new DateTime(2017, 6, 12);
-            Assert.AreEqual(next.Date, _naw.Date);
-
-
+            DateTime now = DateTime.Parse(prestamo);
+            DateTime next = DateTime.Parse(entrega);
+            Assert.AreEqual(next.Date, Bibliotecario.BuildDateOfDelivery(now).Date);
         }
 
         /// <summary>

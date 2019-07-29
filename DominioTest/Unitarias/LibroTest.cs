@@ -34,14 +34,33 @@ namespace DominioTest.Unitarias
             Assert.AreEqual(ANIO, libro.Anio);
         }
 
-        [TestMethod]
-        public void ValidateStrPalindromo()
+        /// <summary>
+        /// Valida los ISBN para identificar si es palindromo
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <param name="response"></param>
+        [DataTestMethod]
+        [DataRow("11211", true)]
+        [DataRow("65842", false)]
+        public void ValidateStrPalindromo(string isbn,bool response)
         {
-            Libro libro = new Libro("121", "Tom Sawyer", 2014);
-            Assert.AreEqual(true, libro.Isbn.IsPalindromo());
-
+            Libro libro = new Libro(isbn, "Tom Sawyer", 2014);
+            Assert.AreEqual(response, libro.Isbn.IsPalindromo());
         }
 
+        /// <summary>
+        /// Valdia la suma de los caracteres del ISBN
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <param name="suma"></param>
+        [DataTestMethod]
+        [DataRow("11211", false)]
+        [DataRow("987899", true)]
+        public void ValidarSumaMayor(string isbn,bool suma)
+        {
+            Libro libro = new Libro(isbn, "Tom Sawyer", 2014);
+            Assert.AreEqual(suma, libro.Isbn.SumIsMoreThan(30));
+        }
         
     }
 }
