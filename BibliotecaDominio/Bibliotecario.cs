@@ -11,6 +11,9 @@ namespace BibliotecaDominio
         public const string STR_IS_PALINDROMO = "los libros palíndromos solo se pueden utilizar en la biblioteca";
         public const string ISBN_NOT_FORMAT = "El valor ingresado no es un ISBN";
         public const string EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE = "El libro no se encuentra disponible";
+        public const string LIBRO_NO_DISPONIBLE = "La biblioteca no tiene el libro";
+
+
         private  IRepositorioLibro libroRepositorio;
         private  IRepositorioPrestamo prestamoRepositorio;
 
@@ -27,13 +30,10 @@ namespace BibliotecaDominio
         /// <param name="nombreUsuario">Nombre del usuario</param>
         public void Prestar(string isbn, string nombreUsuario)
         {
-            if (!isbn.IsNumber())
-                throw new Exception(ISBN_NOT_FORMAT);
-            if (isbn.IsPalindromo())
-                throw new Exception(STR_IS_PALINDROMO);
-            if (this.prestamoRepositorio.Obtener(isbn) != null)
-                throw new Exception(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
-            Libro libro = this.libroRepositorio.ObtenerPorIsbn(isbn);
+            /*if (!isbn.IsNumber())
+                throw new Exception(ISBN_NOT_FORMAT);*/
+
+            Libro libro = ValidacionesDePrestamo(isbn);
             Prestamo prestamo;
             if (isbn.SumIsMoreThan(30))
             {
@@ -47,6 +47,18 @@ namespace BibliotecaDominio
             
         }
 
+
+        public Libro ValidacionesDePrestamo(string isbn)
+        {
+            Libro libro = this.libroRepositorio.ObtenerPorIsbn(isbn);
+            if (libro == null)
+                throw new Exception(LIBRO_NO_DISPONIBLE);
+            if (isbn.IsPalindromo())
+                throw new Exception(STR_IS_PALINDROMO);
+            if (this.prestamoRepositorio.Obtener(isbn) != null)
+                throw new Exception(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
+            return libro;
+        }
 
         public bool EsPrestado(string isbn)
         {
@@ -78,6 +90,8 @@ namespace BibliotecaDominio
                 if (numDays == 15)
                     moreDays = false;
             }
+            if (dateDelivery.DayOfWeek.Equals(DayOfWeek.Sunday))
+                return dateDelivery.AddDays(1);
             return dateDelivery;
         }
     }

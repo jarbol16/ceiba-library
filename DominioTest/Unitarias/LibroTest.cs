@@ -34,13 +34,14 @@ namespace DominioTest.Unitarias
             Assert.AreEqual(ANIO, libro.Anio);
         }
 
-        /// <summary>
-        /// Prueb apara validar el codigo isbn
-        /// </summary>
         [TestMethod]
-        public void ValidateIsbn()
+        public void ValidateStrPalindromo()
         {
-            
+            Libro libro = new Libro("121", "Tom Sawyer", 2014);
+            Assert.AreEqual(true, libro.Isbn.IsPalindromo());
+
         }
+
+        
     }
 }

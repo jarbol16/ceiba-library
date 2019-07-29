@@ -62,6 +62,7 @@ namespace DominioTest.Unitarias
         /// <summary>
         /// Prueba para verificar que el isb cumple con el estandar
         /// </summary>
+        /*
         [TestMethod]
         public void ValidarISBN()
         {
@@ -75,24 +76,27 @@ namespace DominioTest.Unitarias
             {
                 Assert.AreEqual(Bibliotecario.ISBN_NOT_FORMAT, ex.Message);
             }
-        }
+        }*/
 
-        /// <summary>
-        /// Validaciond e isb Palindromo
-        /// </summary>
+        ///
+        /// Se valida que el libro si exista en la biblioteca
+        ///
         [TestMethod]
-        public void IsPalindromo()
+        public void VerificarSiExisteELLibro()
         {
+            var libroTest = new LibroTestDataBuilder();
+            Libro libroEnBiblioteca = libroTest.Build();
+
+            repositorioPrestamo.Setup(r => r.ObtenerLibroPrestadoPorIsbn(libroEnBiblioteca.Isbn)).Equals(null);
+            repositorioLibro.Setup(r => r.ObtenerPorIsbn(libroEnBiblioteca.Isbn)).Returns(libroEnBiblioteca);
+
+            
             Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro.Object, repositorioPrestamo.Object);
-            try
-            {
-                bibliotecario.Prestar("11211", "juan");
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual(Bibliotecario.STR_IS_PALINDROMO, ex.Message);
-            }
+            Libro libro = bibliotecario.ValidacionesDePrestamo(libroEnBiblioteca.Isbn);
+
+
+            Assert.IsNotNull(libro);
+
         }
 
     }

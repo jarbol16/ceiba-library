@@ -73,7 +73,7 @@ namespace DominioTest.Integracion
         [TestMethod]
         public void ValidateFechaNula()
         {
-            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).Build();
+            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).ConIsbn("123456").Build();
             repositorioLibro.Agregar(libro);
             Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
             bibliotecario.Prestar(libro.Isbn, "pedrito");
@@ -90,15 +90,38 @@ namespace DominioTest.Integracion
         [TestMethod]
         public void ValidarFechaDEntrega()
         {
-            DateTime now = DateTime.Now;
-       
+            DateTime now = new DateTime(2017, 5, 24);
             DateTime _naw = Bibliotecario.BuildDateOfDelivery(now);
-            DateTime next = new DateTime(2019, 8, 13);
+            DateTime next = new DateTime(2017, 6, 9);
             Assert.AreEqual(next.Date, _naw.Date);
 
-            //TODO: Esta funcion esta mala
-            //DateTime __now = CalificadorUtil.sumarDiasSinContarDomingo(now, 15);
 
+            now = new DateTime(2017, 5, 26);
+            _naw = Bibliotecario.BuildDateOfDelivery(now);
+            next = new DateTime(2017, 6, 12);
+            Assert.AreEqual(next.Date, _naw.Date);
+
+
+        }
+
+        /// <summary>
+        /// Validacion de excepcion de pedir un libro en la biblioteca con un isbn palindromo
+        /// </summary>
+        [TestMethod]
+        public void IsPalindromo()
+        {
+            Libro libro = new LibroTestDataBuilder().ConTitulo(CRONICA_UNA_MUERTE_ANUNCIADA).ConIsbn("11211").Build();
+            repositorioLibro.Agregar(libro);
+            Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
+            try
+            {
+                bibliotecario.Prestar("11211", "juan");
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(Bibliotecario.STR_IS_PALINDROMO, ex.Message);
+            }
         }
 
     }

@@ -50,6 +50,9 @@ namespace BibliotecaRepositorio.Repositorio
             {
                 LibroEntidad = libroEntidad,
                 FechaSolicitud = prestamo.FechaSolicitud,
+                //FechaEntregaMaxima = prestamo.FechaEntregaMaximo,
+                NombreUsuario = prestamo.NombreUsuario
+
             };
 
             return prestamoEntidad;
@@ -68,6 +71,8 @@ namespace BibliotecaRepositorio.Repositorio
                     );
             }
             return prestamo;
-        }                 
+        }
+        
+
     }
 }
